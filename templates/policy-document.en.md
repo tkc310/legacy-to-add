@@ -50,7 +50,9 @@
 ## 5. Means of assurance
 
 - How automated checks (tests, lint, types) are run (the same commands locally and in CI):
-- Location of the verification skill, and the list of features it covers:
+- Location of the sources of truth (feature map, feature specifications, glossary, ADRs, judgment ledger):
+- Location of the verification skill (it uses the feature map as its feature list):
+- Property-based UI test targets and tools (or the reason for skipping):
 - Formal-verification targets, tools, scope and limits (or the reason for skipping):
 - Location of the rules-to-enforcement mapping:
 - Where evidence and decision records are stored:

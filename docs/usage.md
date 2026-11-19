@@ -47,6 +47,14 @@ Choose how answers are collected before the questionnaire goes out:
 
 The methods, the concerns, and the build guide are in [Answer collection](answer-collection.md).
 
+Build the feature map and use its names:
+
+> Follow `legacy-to-add`. For stage 1, draft the feature map from the code and from running the app, and register the names in the glossary as hypotheses. Then write the feature specification for the checkout feature. Mark what you could not exercise as not checked, and ask me only the hypotheses you cannot settle yourself.
+
+Decide on property-based UI tests and statecharts instead of assuming them:
+
+> Follow `legacy-to-add`. For the order-editing screen, assess whether property-based UI tests are worth adopting, using the skill’s criteria, and record the decision and the reason. If its state transitions are complex, propose a statechart for the specification. Do not introduce XState into product code without my decision.
+
 Japanese versions of these prompts are in [使い方](ja/usage.md).
 
 ## What the agent should do
@@ -56,14 +64,15 @@ The skill tells the agent to:
 1. Start with the three confirmations above and a stage-0 diagnosis, then produce the first policy document.
 2. Say, for each piece of work, which stage, area, and step it belongs to in the policy document.
 3. Split work into small units that can each be verified, and pass the check for one unit before starting the next.
-4. Attach evidence to every “done” report: the commands actually run and their output, or the location of recordings. State plainly what was not checked.
+4. Attach evidence to every “done” report: the commands actually run and their output, or the location of recordings. A UI change is done only after the app has been run and the evidence attached. State plainly what was not checked.
 5. Report, with reasons, whether the stage’s done criteria and the gate to the next stage are met. An unmet item is reported as unmet.
 6. Stop when a human judgment is required, and hand over short decision material, evidence, and a recommendation.
 7. On receiving the same correction a second time, propose a change to the repository itself, at the highest level that works (design, then types or lint, then tests), instead of trying to remember the instruction.
 8. Never judge its own change as passing. Never weaken tests, expected values, or the properties under verification to make a check pass.
-9. Write new findings, decisions, and open questions back into the glossary, ADRs, judgment ledger, rules-to-enforcement mapping, and policy document.
+9. Write new findings, decisions, and open questions back into the feature map, feature specifications, glossary, ADRs, judgment ledger, rules-to-enforcement mapping, and policy document.
 10. State numbers and tool behavior only after checking them. Anything unchecked is marked “needs confirmation” (`要確認` in the skill text).
 11. Before the first questionnaire goes out, propose ways to collect the answers, with their concerns. Send or build nothing until the user has chosen.
+12. Call features and screens by their names in the feature map and the glossary. Register something that has no name as a hypothesis term first.
 
 The skill also lists common failures and how to avoid each one, under 「よくある失敗と回避策」.
 
@@ -76,7 +85,13 @@ The agent drafts the policy document in stage 0 and updates it as the stages pro
 - [`templates/policy-document.md`](../templates/policy-document.md) — Japanese; matches the skill.
 - [`templates/policy-document.en.md`](../templates/policy-document.en.md) — English translation.
 
-If the two disagree, the Japanese template and the skill are the source of truth.
+In stage 1 the agent drafts a feature map, a specification per feature, and glossary terms. Templates:
+
+- [`templates/feature-map.md`](../templates/feature-map.md) — feature map (English: [`feature-map.en.md`](../templates/feature-map.en.md)).
+- [`templates/feature-spec.md`](../templates/feature-spec.md) — feature specification, one file per feature (English: [`feature-spec.en.md`](../templates/feature-spec.en.md)).
+- [`templates/glossary-term.md`](../templates/glossary-term.md) — glossary term, one file per term (English: [`glossary-term.en.md`](../templates/glossary-term.en.md)).
+
+If a Japanese template and its translation disagree, the Japanese template and the skill are the source of truth.
 
 ## What humans still decide
 
@@ -91,7 +106,9 @@ People still:
 - Approve irreversible operations: production releases, data deletion or migration, sending data outside.
 - Change agent permissions and the scope of work left to agents.
 
-For these, the agent should bring short decision material and evidence, not a request to read every changed line.
+People also decide whether to introduce a state-machine library such as XState into product code: it is a design change that affects behavior.
+
+For these, the agent should bring short decision material and evidence (recordings, screenshots, diagrams, check results), not a request to read every changed line.
 
 ## Suggested layout in the target project
 
@@ -101,7 +118,9 @@ The skill does not prescribe path names. Pick one place under version control an
 docs/ai-ready/
   policy.md              # the policy document, updated each stage
   diagnosis.md           # stage 0 record
-  glossary.md
+  feature-map.md         # all features, from the user's point of view
+  features/              # one specification per feature
+  glossary/              # one term per file
   adr/
   questionnaires/
   judgment-ledger.md
