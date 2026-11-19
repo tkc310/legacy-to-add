@@ -39,7 +39,7 @@ Resume in a later stage:
 
 Keep the agent from deciding what only a person can decide:
 
-> Follow `legacy-to-add`. Recover the specification for the authentication area (stage 1). Draft a short multiple-choice questionnaire with only blocking or high-priority questions. Show the respondent a one-line hypothesis and a few options; keep the rationale on your side. Do not treat your hypotheses as confirmed.
+> Follow `legacy-to-add`. Recover the specification for the authentication area (stage 1). Draft a short multiple-choice questionnaire with only the blocking or high-priority questions. Show the respondent just the question, a one-line hypothesis, and a few options; keep the evidence in your own ledger. Do not treat your hypotheses as confirmed.
 
 Japanese versions of these prompts are in [使い方](ja/usage.md).
 
