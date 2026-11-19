@@ -10,7 +10,7 @@
 
 An [Agent Skill](https://agentskills.io/specification) that takes a legacy project whose context has been lost and moves it, stage by stage, to a state where AI-assisted development is safe. Safety comes from structure, verification, and artifacts, not from a person reading every diff.
 
-The installable skill is [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md). It is written in Japanese. This README and the pages under `docs/` ([Installation](docs/installation.md), [Usage](docs/usage.md), [Stages](docs/stages.md), [FAQ](docs/faq.md)) are the English entry point.
+The installable skill is [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md). It is written in Japanese. This README and the pages under `docs/` ([Installation](docs/installation.md), [Usage](docs/usage.md), [Stages](docs/stages.md), [Answer collection](docs/answer-collection.md), [FAQ](docs/faq.md)) are the English entry point.
 
 ## What this is, and what it is not
 
@@ -75,7 +75,7 @@ The work goes through six stages. They are not a strict sequence: on a large pro
 | 4. Confirm done criteria and operate | Confirm that AI-assisted work can run safely, and define how it runs day to day | Project-specific done criteria; the AI-work flow; a place to record failures and corrections |
 | 5. Improvement loop | Turn recurring mistakes into structure, so the next agent cannot make them | Failure and correction records, grouped by kind; agreed scope of automatic changes; proof that new checks fail on past mistakes; metrics |
 
-[Stages](docs/stages.md) describes the work, done criteria, and gate for each stage, and the principles that apply in all of them.
+[Stages](docs/stages.md) describes the work, done criteria, and gate for each stage, and the principles that apply in all of them. In stage 1 the agent proposes how to collect questionnaire answers and you choose; [Answer collection](docs/answer-collection.md) describes the methods, including GitHub + Slack + a Claude artifact.
 
 ## Repository layout
 
@@ -87,6 +87,7 @@ skills/legacy-to-add/SKILL.md # the skill (Japanese; the file an agent loads)
 docs/installation.md
 docs/usage.md
 docs/stages.md
+docs/answer-collection.md
 docs/faq.md
 docs/ja/                           # Japanese versions of the docs
 templates/policy-document.md       # policy template (Japanese; matches the skill)

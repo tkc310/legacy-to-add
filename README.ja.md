@@ -10,7 +10,7 @@
 
 仕様や経緯が失われたレガシープロジェクトを、段階を踏んで、安全に AI 駆動開発できる状態まで進めるための [Agent Skill](https://agentskills.io/specification) です。安全性は、人が差分を読むことではなく、構造・検証・成果物で担保します。
 
-インストールするスキルは [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md) で、本文は日本語です。日本語の説明は、この README と `docs/ja/` のページ（[インストール](docs/ja/installation.md)、[使い方](docs/ja/usage.md)、[段階](docs/ja/stages.md)、[よくある質問](docs/ja/faq.md)）にあります。英語の入口は [README.md](README.md) です。
+インストールするスキルは [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md) で、本文は日本語です。日本語の説明は、この README と `docs/ja/` のページ（[インストール](docs/ja/installation.md)、[使い方](docs/ja/usage.md)、[段階](docs/ja/stages.md)、[回答の集め方](docs/ja/answer-collection.md)、[よくある質問](docs/ja/faq.md)）にあります。英語の入口は [README.md](README.md) です。
 
 ## できること、できないこと
 
@@ -75,7 +75,7 @@ cp -r /tmp/legacy-to-add/skills/legacy-to-add .cursor/skills/legacy-to-add
 | 4. 完了条件の確認と運用 | 安全に AI 駆動開発を回せることを確認し、運用の流れを決める | 具体化した完了条件、AI 作業の流れ、失敗と訂正の記録の置き場所 |
 | 5. 改善ループ | 繰り返す誤りを構造に落とし、次のエージェントが同じ誤りを起こせないようにする | 失敗と訂正の記録と種類の一覧、自動で変えてよい範囲の合意、新しい検査が過去の誤りで失敗する証明、指標 |
 
-段階ごとの作業、完了条件、次の段階に進む判定と、段階をまたぐ原則は、[段階](docs/ja/stages.md) にあります。
+段階ごとの作業、完了条件、次の段階に進む判定と、段階をまたぐ原則は、[段階](docs/ja/stages.md) にあります。段階1では、質問票の回答を集める方法をエージェントが提案し、ユーザーが選びます。GitHub + Slack + Claude アーティファクトの構成を含む方法の説明は、[回答の集め方](docs/ja/answer-collection.md) にあります。
 
 ## リポジトリの構成
 
@@ -87,6 +87,7 @@ skills/legacy-to-add/SKILL.md # スキル本文（日本語。エージェント
 docs/installation.md
 docs/usage.md
 docs/stages.md
+docs/answer-collection.md
 docs/faq.md
 docs/ja/                           # 上記ドキュメントの日本語版
 templates/policy-document.md       # 方針書のテンプレート（日本語。スキル本文と一致）

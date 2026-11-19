@@ -40,6 +40,10 @@ The skill deliberately does not fix values such as a questionnaire length, a cov
 
 In one version-controlled place in the *target* project, named in the policy document. This repository ships only the templates. For an example, see [Suggested layout in the target project](usage.md#suggested-layout-in-the-target-project).
 
+## How are questionnaire answers collected?
+
+The agent proposes methods and you choose. They range from documents in the repository to GitHub as the source of truth with Slack for input and a Claude artifact for display. Whatever the method, the answers are written back to the one source of truth, and the artifact is never the input or the database. See [Answer collection](answer-collection.md).
+
 ## The agent is working in English. Will the Japanese skill still work?
 
 Usually, yes. The agent reads the Japanese instructions and can report to you in English if you ask. Keep hypotheses, glossary entries, and ADRs in the language the project already uses, so the people who approve them can read the source of truth.
