@@ -1,18 +1,18 @@
 <!--
   English translation of templates/policy-document.md.
-  The Japanese template matches the skill text. If translations drift,
-  treat the Japanese template and skills/legacy-to-ai-ready/SKILL.md as
-  the source of truth.
+  The Japanese template matches the skill text. If this translation
+  drifts, treat the Japanese template and
+  skills/legacy-to-ai-ready/SKILL.md as the source of truth.
 -->
 
-# Delivery policy
+# Policy document: how the work will proceed
 
 - Version: (date of this update)
 - Author: (role name)  Approver: (role name)
 
 ## 1. Scope
 
-- System and scope in scope:
+- Target system and its scope:
 - Out of scope:
 - Goal (what “safe for AI-assisted development” means on this project):
 - Constraints (deadlines, contracts, whether code may be sent to external AI services, places that must not be touched):
