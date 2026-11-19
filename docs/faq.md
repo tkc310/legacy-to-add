@@ -28,9 +28,17 @@ Three shortcuts are ruled out:
 
 ## Do I need pstack, or Lauren Tan’s (`@poteto`) skills, to use this?
 
-No. The skill’s “do not lean on human review” structure draws on Lauren Tan’s public posts, pstack’s official guides, and skills that ship with pstack, all cited in the skill. The skill names and slash commands from those sources were made for a particular tool; whether they exist in *your* environment needs checking. If they do not, build something that meets the requirements written in the skill, fitted to the project.
+No. The skill’s “do not lean on human review” structure draws on Lauren Tan’s public posts, pstack’s official guides, and skills that ship with pstack, and an excerpt of one of her talks supplied by the requester (title, date, and URL need confirmation), all cited in the skill. The skill names and slash commands from those sources were made for a particular tool; whether they exist in *your* environment needs checking. If they do not, build something that meets the requirements written in the skill, fitted to the project.
 
 Longer essays by the same author (including “Loops You Can Trust” and “The Complete Guide to pstack” parts 1 and 2) are not quoted in the skill, because their full text was not retrieved when the skill was written.
+
+## What are the feature map, the feature specifications, and the glossary for?
+
+They are the three central artifacts of stage 1. The feature map lists every feature from the user’s point of view, each feature has a specification, and each term has a glossary file. The map and the glossary act as a ubiquitous language, so people and agents refer to the same thing by the same name instead of “that thing in the left sidebar”. The stage-3 verification skill uses the same map as its feature list, so there is only one list to maintain. The agent drafts all three from the code and from running the app; you are asked only short multiple-choice questions, not to review the documents. See [Stages](stages.md#feature-map-feature-specifications-and-glossary).
+
+## Do I have to adopt property-based UI tests or XState?
+
+No. The skill asks the agent to assess property-based UI tests per target against stated criteria and to record the decision either way. A statechart (XState’s format, for example) is suggested only for specifying complex workflows; putting XState into product code is a separate design decision that stays with a person. Details of the fast-check and XState APIs are marked as needing confirmation against their official documentation. See [Stages](stages.md#deciding-whether-to-adopt-property-based-ui-tests).
 
 ## The skill marks some numbers as “needs confirmation”. What should I put there?
 

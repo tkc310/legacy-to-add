@@ -14,7 +14,7 @@ The installable skill is [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/
 
 ## What this is, and what it is not
 
-This repository ships a procedure for an agent, plus documentation and a policy-document template. The agent applies the procedure to a *target* project: the legacy codebase.
+This repository ships a procedure for an agent, plus documentation and templates (policy document, feature map, feature specification, glossary term). The agent applies the procedure to a *target* project: the legacy codebase.
 
 It is not a code generator, a linter, or a hosted app. It does not rewrite a legacy system in one pass. It does not claim that human judgment goes away: people still decide what is correct, approve the policy, accept behavior-changing changes, and approve irreversible operations. What the skill rejects is “someone will read the diff” as the guarantee of safety.
 
@@ -57,8 +57,9 @@ A starting prompt:
 From there, the agent should:
 
 - draft a policy document from [`templates/policy-document.md`](templates/policy-document.md) (English translation: [`templates/policy-document.en.md`](templates/policy-document.en.md)) and update it as the stages progress;
+- in stage 1, draft a feature map ([`templates/feature-map.md`](templates/feature-map.md)), feature specifications ([`templates/feature-spec.md`](templates/feature-spec.md)), and glossary terms ([`templates/glossary-term.md`](templates/glossary-term.md)) from the code and from running the app, and call features and screens by those names from then on (each template has an `.en.md` translation);
 - stop when a human judgment is required;
-- attach evidence to every “done” report: the commands it actually ran and their output, or the location of recordings.
+- attach evidence to every “done” report: the commands it actually ran and their output, or the location of recordings. A UI change is done only after the app has been run and the evidence attached.
 
 [Usage](docs/usage.md) has more prompts, the full list of expected agent behavior, the judgments that stay with people, and a suggested document layout for the target project.
 
@@ -69,13 +70,15 @@ The work goes through six stages. They are not a strict sequence: on a large pro
 | Stage | Aim | Main artifacts |
 |---|---|---|
 | 0. Diagnose | Decide where to spend effort, and write the first policy document | Diagnosis record (including commands and output); first policy document |
-| 1. Recover the specification | Recover context that is not in the code, and record terms and decisions in one source of truth | Role list; glossary; ADRs; questionnaires and answers; deferred list; open questions |
+| 1. Recover the specification | Recover context that is not in the code, and record features, terms, and decisions in one source of truth | Role list; feature map; feature specifications; glossary; ADRs; questionnaires and answers; deferred list; open questions |
 | 2. Pin behavior and fix | Pin current behavior with tests, have the decision-maker judge “as specified or a bug”, then fix | Characterization and specification tests; judgment ledger; fixes; bug cases kept to prove later checks |
-| 3. Build guardrails | Enforce rules through design, types, lint, and tests, and give the agent a verification skill | Formatter, linter, and type settings; tests; verification skill; formal verification where chosen; agent rule files; rules-to-enforcement mapping; automated checks |
+| 3. Build guardrails | Enforce rules through design, types, lint, and tests, and give the agent a verification skill | Formatter, linter, and type settings; tests; verification skill (driven by the stage-1 feature map); property-based UI tests and formal verification where chosen; agent rule files; rules-to-enforcement mapping; automated checks |
 | 4. Confirm done criteria and operate | Confirm that AI-assisted work can run safely, and define how it runs day to day | Project-specific done criteria; the AI-work flow; a place to record failures and corrections |
 | 5. Improvement loop | Turn recurring mistakes into structure, so the next agent cannot make them | Failure and correction records, grouped by kind; agreed scope of automatic changes; proof that new checks fail on past mistakes; metrics |
 
 [Stages](docs/stages.md) describes the work, done criteria, and gate for each stage, and the principles that apply in all of them. In stage 1 the agent proposes how to collect questionnaire answers and you choose; [Answer collection](docs/answer-collection.md) describes the methods, including GitHub + Slack + a Claude artifact.
+
+The feature map and the glossary act as a ubiquitous language: people and agents refer to features and screens by the same names, and the stage-3 verification skill uses the same map as its feature list. Stage 3 also has criteria for deciding whether to adopt property-based UI tests, and stage 1 says when to express a complex workflow as a state machine or statechart (XState, for example).
 
 ## Repository layout
 
@@ -92,6 +95,9 @@ docs/faq.md
 docs/ja/                           # Japanese versions of the docs
 templates/policy-document.md       # policy template (Japanese; matches the skill)
 templates/policy-document.en.md    # English translation of the template
+templates/feature-map.md           # feature map template (Japanese; .en.md is the translation)
+templates/feature-spec.md          # feature specification template, one file per feature (.en.md too)
+templates/glossary-term.md         # glossary term template, one file per term (.en.md too)
 ```
 
 ## FAQ
@@ -105,7 +111,7 @@ The [FAQ](docs/faq.md) answers these and other questions:
 
 ## Sources
 
-The skill’s “do not lean on human review” structure draws on public posts by Lauren Tan ([@poteto](https://x.com/poteto)), pstack’s official guides, and skills that ship with pstack. The sources were retrieved on 2026-11-19. The citations, with links, are in the skill under 「出典」. The stage structure, the line between human and agent judgments, and the application to legacy projects are this skill’s own, not claims made by those sources.
+The skill’s “do not lean on human review” structure draws on public posts by Lauren Tan ([@poteto](https://x.com/poteto)), pstack’s official guides, and skills that ship with pstack. Those sources were retrieved on 2026-11-19. The verification layer, runtime verification, and the feature map also draw on an excerpt of a talk by Lauren Tan that the requester supplied; the talk’s title, date, and URL are not in the excerpt and need confirmation. For property-based tests and statecharts, the skill cites the fast-check and XState documentation, retrieved on 2026-11-20; API details can change, so check the current documentation before applying them. The citations, with links, are in the skill under 「出典」. The stage structure, the line between human and agent judgments, and the application to legacy projects are this skill’s own, not claims made by those sources.
 
 Longer essays by the same author (including “Loops You Can Trust” and “The Complete Guide to pstack” parts 1 and 2) are not quoted in the skill, because their full text was not retrieved when the skill was written.
 
