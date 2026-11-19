@@ -68,8 +68,8 @@ In stages 0 to 2 the structural guarantees are still thin, and more human confir
 
 - List decision-makers and experts by role, per functional area.
 - Dig before asking: do not ask what the code, history, or tickets can tell you. What you find goes into the glossary as a hypothesis, with its evidence.
-- Classify the questions. Separate As-Is (confirm a hypothesis about current behavior) from To-Be (ask the decision-maker what should be true).
-- Bundle questions into multiple-choice questionnaires and send them asynchronously. Each question carries a hypothesis, evidence, options, and an “I don’t know (who does?)” way out.
+- Classify the questions and merge duplicates. Separate As-Is (confirm a hypothesis about current behavior) from To-Be (ask the decision-maker what should be true). Ask only one thing per question. Drop what the code, history, or a run can answer, what would not change implementation or judgment, and what is not blocking now (defer it). Send only blocking or high-priority questions.
+- Bundle those questions into a multiple-choice questionnaire and send it asynchronously. The respondent sees a short summary (what is needed, why, the deadline, and the estimated time) and, for each question, a sentence or two, a one-line hypothesis, and two to four options plus “I don’t know (who does?)”. Keep evidence, classification, and priority in an agent-side ledger, or folded away. Before sending, check that each question can be answered in about ten seconds; if not, split it or shorten it.
 - Write the answers back into the glossary and ADRs. An entry becomes confirmed when the respondent or decision-maker confirms it.
 - Keep hypotheses and confirmed entries visibly distinct. The agent does not change behavior on the strength of a hypothesis.
 
