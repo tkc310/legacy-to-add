@@ -1,0 +1,105 @@
+# Installation
+
+This repository is documentation plus one Agent Skill. The file an agent loads is [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). Copy that folder — not the whole repository — into the skills directory of the tool you use.
+
+The skill body is written in Japanese. English-language agents can still follow it; this documentation is the English entry point for people.
+
+日本語の手順は [installation（日本語）](ja/installation.md) を見てください。
+
+## What to copy
+
+After you clone or download this repository, the folder to install is:
+
+```text
+skills/legacy-to-ai-ready/
+└── SKILL.md
+```
+
+The folder name should stay `legacy-to-ai-ready`, because that is the skill’s `name` in the frontmatter and the command many tools expose (for example `/legacy-to-ai-ready`).
+
+## Claude Code
+
+Claude Code loads skills from a personal directory or from a project directory. See the official page [Extend Claude with skills](https://code.claude.com/docs/en/skills).
+
+### Personal install (every project on this machine)
+
+```bash
+git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
+mkdir -p ~/.claude/skills
+cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai-ready
+```
+
+Personal skills are available in local Claude Code sessions on that machine. They are not automatically available in Claude Code cloud sessions or Cowork.
+
+### Project install (this repository only, shareable with the team)
+
+From the root of the project where you want the skill:
+
+```bash
+git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
+mkdir -p .claude/skills
+cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .claude/skills/legacy-to-ai-ready
+```
+
+Commit `.claude/skills/legacy-to-ai-ready/` so teammates get the skill when they pull. Project skills load in sessions started in that repository.
+
+### Confirm it loaded
+
+1. Start a new Claude Code session in a project (or restart if your build does not watch for new skills).
+2. Type `/`. The command menu should list `legacy-to-ai-ready`. `/skills` lists skills with their descriptions.
+3. You can invoke it directly with `/legacy-to-ai-ready`.
+
+If it does not appear, check that the file sits at `…/skills/legacy-to-ai-ready/SKILL.md`, that the file starts with YAML frontmatter between `---` markers, and that the frontmatter includes `name` and `description`.
+
+## Cursor
+
+Cursor loads skills from project and user directories. It also reads Claude Code and Codex skill directories for compatibility. See the official page [Agent Skills](https://cursor.com/docs/skills).
+
+| Scope | Directories |
+|---|---|
+| Project (everyone who pulls the repo) | `.cursor/skills/`, `.agents/skills/` |
+| User (this machine) | `~/.cursor/skills/`, `~/.agents/skills/` |
+| Also loaded, for compatibility | `.claude/skills/`, `~/.claude/skills/`, and the Codex equivalents |
+
+### Project install
+
+```bash
+git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
+mkdir -p .cursor/skills
+cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-ready
+```
+
+Commit the copied folder if the rest of the team should have the skill.
+
+### User install
+
+```bash
+git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
+mkdir -p ~/.cursor/skills
+cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.cursor/skills/legacy-to-ai-ready
+```
+
+User-level skills under `~/.cursor/skills/` stay on the machine until you sync them for Cloud Agents or publish them to your team. Cursor does not automatically copy unsynced local user skills into Cloud Agents.
+
+### Confirm it loaded
+
+Open **Customize** in the sidebar and go to **Skills**. You can also type `/legacy-to-ai-ready` in Agent chat.
+
+Cursor’s packaged route for installing skills from GitHub is a plugin that ships a `.cursor-plugin/marketplace.json`. This repository does not include that file, so the supported install path is to copy the skill folder as shown above.
+
+## Other tools that implement Agent Skills
+
+This skill follows the usual layout: a directory named after the skill, containing a `SKILL.md` with YAML frontmatter (`name` and `description`) and a Markdown body. Tools that implement the [Agent Skills](https://agentskills.io/specification) layout can load it the same way: place `legacy-to-ai-ready/SKILL.md` in that tool’s skills directory. Check that tool’s documentation for the exact path.
+
+## Updating
+
+To replace an installed copy with a newer revision of this repository:
+
+```bash
+git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
+cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready/. /path/to/skills/legacy-to-ai-ready/
+```
+
+Use the install path you chose earlier (`~/.claude/skills/legacy-to-ai-ready`, `.cursor/skills/legacy-to-ai-ready`, and so on). Then start a new session, or confirm that the running session has picked up the change.
+
+Do not edit only the copy in your project and assume this repository will stay in sync. If you change the process, change it here or record the difference in the target project’s policy document.
