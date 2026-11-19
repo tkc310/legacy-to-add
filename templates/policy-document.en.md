@@ -2,7 +2,7 @@
   English translation of templates/policy-document.md.
   The Japanese template matches the skill text. If this translation
   drifts, treat the Japanese template and
-  skills/legacy-to-ai-ready/SKILL.md as the source of truth.
+  skills/legacy-to-add/SKILL.md as the source of truth.
 -->
 
 # Policy document: how the work will proceed

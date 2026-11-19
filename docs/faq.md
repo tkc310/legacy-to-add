@@ -8,10 +8,6 @@ The skill was written and tested in Japanese. The repository ships that file as 
 
 A full English translation is left out on purpose: two long bodies would become two sources of truth. English readers should start at the [README](../README.md) and continue with [Installation](installation.md), [Usage](usage.md), and [Stages](stages.md).
 
-## The repository is named `legacy-to-add`. Is that the skill name?
-
-No. The skill’s `name` is `legacy-to-ai-ready`, and the folder you copy is `skills/legacy-to-ai-ready/`. The GitHub repository that hosts it is [`tkc310/legacy-to-add`](https://github.com/tkc310/legacy-to-add). Use the skill name when you invoke it (`/legacy-to-ai-ready`).
-
 ## Does this skill rewrite my legacy system for me?
 
 No. It is a procedure for an agent and the person directing it. Following the stages, the agent may change the *target* project — diagnosis, characterization tests, fixes within what the tests protect, and so on. This repository contains no product code, and the skill forbids a big-bang rewrite.
@@ -50,4 +46,4 @@ Usually, yes. The agent reads the Japanese instructions and can report to you in
 
 ## How do I update an installed copy?
 
-Copy the `skills/legacy-to-ai-ready/` folder again, over the install path you chose. See [Updating](installation.md#updating).
+Copy the `skills/legacy-to-add/` folder again, over the install path you chose. See [Updating](installation.md#updating).

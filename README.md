@@ -1,4 +1,4 @@
-# legacy-to-ai-ready
+# legacy-to-add
 
 [English](README.md) | [日本語](README.ja.md)
 
@@ -6,13 +6,11 @@
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-555555)](https://agentskills.io/specification)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-d97757)](https://code.claude.com/docs/en/skills)
 [![Cursor](https://img.shields.io/badge/Cursor-compatible-000000)](https://cursor.com/docs/skills)
-[![Skill language](https://img.shields.io/badge/skill_language-Japanese-red)](skills/legacy-to-ai-ready/SKILL.md)
+[![Skill language](https://img.shields.io/badge/skill_language-Japanese-red)](skills/legacy-to-add/SKILL.md)
 
 An [Agent Skill](https://agentskills.io/specification) that takes a legacy project whose context has been lost and moves it, stage by stage, to a state where AI-assisted development is safe. Safety comes from structure, verification, and artifacts, not from a person reading every diff.
 
-The installable skill is [`skills/legacy-to-ai-ready/SKILL.md`](skills/legacy-to-ai-ready/SKILL.md). It is written in Japanese. This README and the pages under `docs/` ([Installation](docs/installation.md), [Usage](docs/usage.md), [Stages](docs/stages.md), [FAQ](docs/faq.md)) are the English entry point.
-
-The skill is named `legacy-to-ai-ready`. The GitHub repository that hosts it is [`tkc310/legacy-to-add`](https://github.com/tkc310/legacy-to-add).
+The installable skill is [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md). It is written in Japanese. This README and the pages under `docs/` ([Installation](docs/installation.md), [Usage](docs/usage.md), [Stages](docs/stages.md), [FAQ](docs/faq.md)) are the English entry point.
 
 ## What this is, and what it is not
 
@@ -29,7 +27,7 @@ Copy the skill folder, not the whole repository, into the skills directory of th
 ```bash
 git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
 mkdir -p ~/.claude/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add ~/.claude/skills/legacy-to-add
 ```
 
 **Cursor** (project install: run from the project root; shareable with the team):
@@ -37,10 +35,10 @@ cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai
 ```bash
 git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
 mkdir -p .cursor/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add .cursor/skills/legacy-to-add
 ```
 
-Then start a new session and invoke `/legacy-to-ai-ready`, or ask for work that matches the skill’s description.
+Then start a new session and invoke `/legacy-to-add`, or ask for work that matches the skill’s description.
 
 [Installation](docs/installation.md) covers the other paths (project-level Claude Code, user-level Cursor, other Agent Skills tools), how to confirm that the skill loaded, and how to update an installed copy.
 
@@ -54,7 +52,7 @@ The skill requires three confirmations before the agent sends code or documents 
 
 A starting prompt:
 
-> We have a legacy project whose original authors are gone, and the documents no longer match the code. Follow the `legacy-to-ai-ready` skill. Start at stage 0: diagnose the repository and draft a policy document. Do not change behavior until the policy is approved.
+> We have a legacy project whose original authors are gone, and the documents no longer match the code. Follow the `legacy-to-add` skill. Start at stage 0: diagnose the repository and draft a policy document. Do not change behavior until the policy is approved.
 
 From there, the agent should:
 
@@ -85,7 +83,7 @@ The work goes through six stages. They are not a strict sequence: on a large pro
 LICENSE
 README.md                          # this file (English)
 README.ja.md                       # Japanese README
-skills/legacy-to-ai-ready/SKILL.md # the skill (Japanese; the file an agent loads)
+skills/legacy-to-add/SKILL.md # the skill (Japanese; the file an agent loads)
 docs/installation.md
 docs/usage.md
 docs/stages.md
@@ -100,7 +98,6 @@ templates/policy-document.en.md    # English translation of the template
 The [FAQ](docs/faq.md) answers these and other questions:
 
 - Why is `SKILL.md` in Japanese?
-- The repository is named `legacy-to-add`. Is that the skill name?
 - Does this skill rewrite my legacy system for me?
 - Does this mean human review is no longer needed?
 - Do I need pstack, or Lauren Tan’s (`@poteto`) skills, to use this?

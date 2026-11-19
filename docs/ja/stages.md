@@ -2,7 +2,7 @@
 
 English: [Stages](../stages.md)
 
-このページは、[`skills/legacy-to-ai-ready/SKILL.md`](../../skills/legacy-to-ai-ready/SKILL.md) の段階0〜5の要約です。手順、チェックリスト、文言の正本はスキル本文です。
+このページは、[`skills/legacy-to-add/SKILL.md`](../../skills/legacy-to-add/SKILL.md) の段階0〜5の要約です。手順、チェックリスト、文言の正本はスキル本文です。
 
 問数の上限、カバレッジの目標、再発回数の閾値などの数値は、スキルでは決めていません。プロジェクトごとに仮置きして「要確認」と書き、実測のあとで見直してください。
 

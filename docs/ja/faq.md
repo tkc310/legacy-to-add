@@ -8,10 +8,6 @@ English: [FAQ](../faq.md)
 
 英語の全訳は、あえて置いていません。長い本文が2つあると、正本が2つになるからです。英語で読む場合は、[README.md](../../README.md) から始めて、[Installation](../installation.md)、[Usage](../usage.md)、[Stages](../stages.md) に進んでください。
 
-## リポジトリ名は `legacy-to-add` ですが、これがスキル名ですか
-
-違います。スキルの `name` は `legacy-to-ai-ready` で、コピーするフォルダは `skills/legacy-to-ai-ready/` です。公開先の GitHub リポジトリは [`tkc310/legacy-to-add`](https://github.com/tkc310/legacy-to-add) です。呼び出すときは、スキル名（`/legacy-to-ai-ready`）を使ってください。
-
 ## このスキルは、レガシーシステムを代わりに書き直しますか
 
 書き直しません。このスキルは、エージェントと、エージェントに指示する人のための手順です。エージェントは、段階に沿って対象プロジェクトを変更することがあります（診断、特性テスト、テストで守られた範囲の修正など）。このリポジトリに製品のコードはなく、スキルは一括の書き直しを禁止しています。
@@ -50,4 +46,4 @@ English: [FAQ](../faq.md)
 
 ## インストール済みのコピーを更新するには
 
-選んだインストール先へ、`skills/legacy-to-ai-ready/` フォルダをもう一度コピーします。手順は [更新](installation.md#更新) にあります。
+選んだインストール先へ、`skills/legacy-to-add/` フォルダをもう一度コピーします。手順は [更新](installation.md#更新) にあります。

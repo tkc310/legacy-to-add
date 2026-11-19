@@ -1,5 +1,5 @@
 <!--
-  Copied from skills/legacy-to-ai-ready/SKILL.md (the section「方針書のテンプレート」).
+  Copied from skills/legacy-to-add/SKILL.md (the section「方針書のテンプレート」).
   If this file and the skill ever disagree, the skill is the source of truth.
 -->
 

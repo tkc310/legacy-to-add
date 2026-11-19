@@ -1,4 +1,4 @@
-# legacy-to-ai-ready
+# legacy-to-add
 
 [English](README.md) | [日本語](README.ja.md)
 
@@ -6,13 +6,11 @@
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-555555)](https://agentskills.io/specification)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-d97757)](https://code.claude.com/docs/en/skills)
 [![Cursor](https://img.shields.io/badge/Cursor-compatible-000000)](https://cursor.com/docs/skills)
-[![Skill language](https://img.shields.io/badge/skill_language-Japanese-red)](skills/legacy-to-ai-ready/SKILL.md)
+[![Skill language](https://img.shields.io/badge/skill_language-Japanese-red)](skills/legacy-to-add/SKILL.md)
 
 仕様や経緯が失われたレガシープロジェクトを、段階を踏んで、安全に AI 駆動開発できる状態まで進めるための [Agent Skill](https://agentskills.io/specification) です。安全性は、人が差分を読むことではなく、構造・検証・成果物で担保します。
 
-インストールするスキルは [`skills/legacy-to-ai-ready/SKILL.md`](skills/legacy-to-ai-ready/SKILL.md) で、本文は日本語です。日本語の説明は、この README と `docs/ja/` のページ（[インストール](docs/ja/installation.md)、[使い方](docs/ja/usage.md)、[段階](docs/ja/stages.md)、[よくある質問](docs/ja/faq.md)）にあります。英語の入口は [README.md](README.md) です。
-
-スキル名は `legacy-to-ai-ready` です。公開先の GitHub リポジトリは [`tkc310/legacy-to-add`](https://github.com/tkc310/legacy-to-add) です。
+インストールするスキルは [`skills/legacy-to-add/SKILL.md`](skills/legacy-to-add/SKILL.md) で、本文は日本語です。日本語の説明は、この README と `docs/ja/` のページ（[インストール](docs/ja/installation.md)、[使い方](docs/ja/usage.md)、[段階](docs/ja/stages.md)、[よくある質問](docs/ja/faq.md)）にあります。英語の入口は [README.md](README.md) です。
 
 ## できること、できないこと
 
@@ -29,7 +27,7 @@
 ```bash
 git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
 mkdir -p ~/.claude/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add ~/.claude/skills/legacy-to-add
 ```
 
 **Cursor**（プロジェクト向け。プロジェクトのルートで実行する。チームと共有できる）:
@@ -37,10 +35,10 @@ cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai
 ```bash
 git clone --depth 1 https://github.com/tkc310/legacy-to-add.git /tmp/legacy-to-add
 mkdir -p .cursor/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add .cursor/skills/legacy-to-add
 ```
 
-コピーしたら、新しいセッションを始めて `/legacy-to-ai-ready` で呼び出すか、スキルの説明に合う作業を依頼します。
+コピーしたら、新しいセッションを始めて `/legacy-to-add` で呼び出すか、スキルの説明に合う作業を依頼します。
 
 ほかの置き場所（プロジェクト向けの Claude Code、ユーザー向けの Cursor、ほかの Agent Skills 対応ツール）、読み込まれたことの確認、インストール済みのコピーの更新は、[インストール](docs/ja/installation.md) に書いてあります。
 
@@ -54,7 +52,7 @@ cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-r
 
 開始時のプロンプトの例:
 
-> 文脈が失われたレガシープロジェクトを、安全に AI 駆動開発できる状態まで進めたいです。`legacy-to-ai-ready` スキルに従って、段階0の現状診断と方針書の初版から始めてください。方針書が承認されるまで、振る舞いは変えないでください。
+> 文脈が失われたレガシープロジェクトを、安全に AI 駆動開発できる状態まで進めたいです。`legacy-to-add` スキルに従って、段階0の現状診断と方針書の初版から始めてください。方針書が承認されるまで、振る舞いは変えないでください。
 
 依頼を受けたエージェントは、次のように動きます。
 
@@ -85,7 +83,7 @@ cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-r
 LICENSE
 README.md                          # 英語版 README（英語の入口）
 README.ja.md                       # このファイル
-skills/legacy-to-ai-ready/SKILL.md # スキル本文（日本語。エージェントが読み込むファイル）
+skills/legacy-to-add/SKILL.md # スキル本文（日本語。エージェントが読み込むファイル）
 docs/installation.md
 docs/usage.md
 docs/stages.md
@@ -100,7 +98,6 @@ templates/policy-document.en.md    # テンプレートの英語訳
 [よくある質問](docs/ja/faq.md) で、次のような質問に答えています。
 
 - なぜ `SKILL.md` は日本語なのですか
-- リポジトリ名は `legacy-to-add` ですが、これがスキル名ですか
 - このスキルは、レガシーシステムを代わりに書き直しますか
 - 人のレビューは、もう不要ですか
 - 使うために pstack や Lauren Tan（`@poteto`）氏のスキルが必要ですか

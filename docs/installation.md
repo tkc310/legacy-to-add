@@ -2,18 +2,18 @@
 
 日本語: [インストール](ja/installation.md)
 
-This repository is documentation plus one Agent Skill. The file an agent loads is [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). To install the skill, copy its folder — not the whole repository — into the skills directory of the tool you use.
+This repository is documentation plus one Agent Skill. The file an agent loads is [`skills/legacy-to-add/SKILL.md`](../skills/legacy-to-add/SKILL.md). To install the skill, copy its folder — not the whole repository — into the skills directory of the tool you use.
 
 The skill body is written in Japanese. An agent working in English can usually still follow it (see the [FAQ](faq.md)); these pages are the English entry point for people.
 
 ## What to copy
 
 ```text
-skills/legacy-to-ai-ready/
+skills/legacy-to-add/
 └── SKILL.md
 ```
 
-Keep the folder name `legacy-to-ai-ready`. It is the skill’s `name` in the frontmatter, and the command many tools expose (for example `/legacy-to-ai-ready`).
+Keep the folder name `legacy-to-add`. It is the skill’s `name` in the frontmatter, and the command many tools expose (for example `/legacy-to-add`).
 
 ## Get the repository
 
@@ -35,7 +35,7 @@ Claude Code loads skills from a personal directory or from a project directory. 
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.claude/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add ~/.claude/skills/legacy-to-add
 ```
 
 Personal skills are available in local Claude Code sessions on that machine. They are not automatically available in Claude Code cloud sessions or Cowork.
@@ -46,18 +46,18 @@ From the root of the project where you want the skill:
 
 ```bash
 mkdir -p .claude/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .claude/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add .claude/skills/legacy-to-add
 ```
 
-Commit `.claude/skills/legacy-to-ai-ready/` so teammates get the skill when they pull. Project skills load in sessions started in that repository.
+Commit `.claude/skills/legacy-to-add/` so teammates get the skill when they pull. Project skills load in sessions started in that repository.
 
 ### Confirm it loaded
 
 1. Start a new Claude Code session in a project (or restart, if your build does not watch for new skills).
-2. Type `/`. The command menu should list `legacy-to-ai-ready`. `/skills` lists skills with their descriptions.
-3. Invoke the skill directly with `/legacy-to-ai-ready`.
+2. Type `/`. The command menu should list `legacy-to-add`. `/skills` lists skills with their descriptions.
+3. Invoke the skill directly with `/legacy-to-add`.
 
-If it does not appear, check three things: the file sits at `…/skills/legacy-to-ai-ready/SKILL.md`; the file starts with YAML frontmatter between `---` markers; and the frontmatter includes `name` and `description`.
+If it does not appear, check three things: the file sits at `…/skills/legacy-to-add/SKILL.md`; the file starts with YAML frontmatter between `---` markers; and the frontmatter includes `name` and `description`.
 
 ## Cursor
 
@@ -75,7 +75,7 @@ From the root of the project where you want the skill:
 
 ```bash
 mkdir -p .cursor/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready .cursor/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add .cursor/skills/legacy-to-add
 ```
 
 Commit the copied folder if the rest of the team should have the skill.
@@ -84,14 +84,14 @@ Commit the copied folder if the rest of the team should have the skill.
 
 ```bash
 mkdir -p ~/.cursor/skills
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready ~/.cursor/skills/legacy-to-ai-ready
+cp -r /tmp/legacy-to-add/skills/legacy-to-add ~/.cursor/skills/legacy-to-add
 ```
 
 User-level skills under `~/.cursor/skills/` stay on the machine until you sync them for Cloud Agents or publish them to your team. Cursor does not automatically copy unsynced local user skills into Cloud Agents.
 
 ### Confirm it loaded
 
-Open **Customize** in the sidebar and go to **Skills**. You can also type `/legacy-to-ai-ready` in Agent chat.
+Open **Customize** in the sidebar and go to **Skills**. You can also type `/legacy-to-add` in Agent chat.
 
 ### No plugin install
 
@@ -99,16 +99,16 @@ Cursor’s packaged route for installing skills from GitHub is a plugin that shi
 
 ## Other tools that implement Agent Skills
 
-The skill follows the usual layout: a directory named after the skill, containing a `SKILL.md` with YAML frontmatter (`name` and `description`) and a Markdown body. A tool that implements the [Agent Skills](https://agentskills.io/specification) layout can load it the same way: place `legacy-to-ai-ready/SKILL.md` in that tool’s skills directory. Check the tool’s documentation for the exact path.
+The skill follows the usual layout: a directory named after the skill, containing a `SKILL.md` with YAML frontmatter (`name` and `description`) and a Markdown body. A tool that implements the [Agent Skills](https://agentskills.io/specification) layout can load it the same way: place `legacy-to-add/SKILL.md` in that tool’s skills directory. Check the tool’s documentation for the exact path.
 
 ## Updating
 
 To replace an installed copy with a newer revision of this repository, clone again (see [Get the repository](#get-the-repository)) and copy the folder’s contents over the installed folder:
 
 ```bash
-cp -r /tmp/legacy-to-add/skills/legacy-to-ai-ready/. /path/to/skills/legacy-to-ai-ready/
+cp -r /tmp/legacy-to-add/skills/legacy-to-add/. /path/to/skills/legacy-to-add/
 ```
 
-Replace `/path/to/skills/legacy-to-ai-ready/` with the install path you chose earlier (`~/.claude/skills/legacy-to-ai-ready`, `.cursor/skills/legacy-to-ai-ready`, and so on). Then start a new session, or confirm that the running session has picked up the change.
+Replace `/path/to/skills/legacy-to-add/` with the install path you chose earlier (`~/.claude/skills/legacy-to-add`, `.cursor/skills/legacy-to-add`, and so on). Then start a new session, or confirm that the running session has picked up the change.
 
 An installed copy does not follow this repository on its own, and edits made only to that copy do not flow back. If you change the process, change it here, or record the difference in the target project’s policy document.

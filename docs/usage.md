@@ -2,7 +2,7 @@
 
 日本語: [使い方](ja/usage.md)
 
-This page is for the person who asks an agent to follow the skill. Install the skill first ([Installation](installation.md)). The procedure itself is in [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md).
+This page is for the person who asks an agent to follow the skill. Install the skill first ([Installation](installation.md)). The procedure itself is in [`skills/legacy-to-add/SKILL.md`](../skills/legacy-to-add/SKILL.md).
 
 ## When to use it
 
@@ -27,19 +27,19 @@ The skill requires three confirmations before the agent sends code or documents 
 
 ## Example prompts
 
-Invoke the skill by name (`/legacy-to-ai-ready` in Claude Code or Cursor) and then state the request, or name the skill in the prompt.
+Invoke the skill by name (`/legacy-to-add` in Claude Code or Cursor) and then state the request, or name the skill in the prompt.
 
 Start at stage 0:
 
-> We have a legacy project whose original authors are gone, and the documents no longer match the code. Follow the `legacy-to-ai-ready` skill. Start at stage 0: diagnose the repository and draft a policy document. Do not change behavior until the policy is approved.
+> We have a legacy project whose original authors are gone, and the documents no longer match the code. Follow the `legacy-to-add` skill. Start at stage 0: diagnose the repository and draft a policy document. Do not change behavior until the policy is approved.
 
 Resume in a later stage:
 
-> Continue `legacy-to-ai-ready` on this repository. We already approved the policy document at `docs/ai-ready/policy.md`. We are in stage 2 for the billing area. Pin the current behavior with characterization tests before any fix.
+> Continue `legacy-to-add` on this repository. We already approved the policy document at `docs/ai-ready/policy.md`. We are in stage 2 for the billing area. Pin the current behavior with characterization tests before any fix.
 
 Keep the agent from deciding what only a person can decide:
 
-> Follow `legacy-to-ai-ready`. Recover the specification for the authentication area (stage 1). Draft a multiple-choice questionnaire from the code and history. Do not treat your hypotheses as confirmed.
+> Follow `legacy-to-add`. Recover the specification for the authentication area (stage 1). Draft a multiple-choice questionnaire from the code and history. Do not treat your hypotheses as confirmed.
 
 Japanese versions of these prompts are in [使い方](ja/usage.md).
 

@@ -2,7 +2,7 @@
 
 日本語: [段階](ja/stages.md)
 
-This page summarizes stages 0 to 5 of [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). The skill is the source of truth for the procedure, the checklists, and the wording.
+This page summarizes stages 0 to 5 of [`skills/legacy-to-add/SKILL.md`](../skills/legacy-to-add/SKILL.md). The skill is the source of truth for the procedure, the checklists, and the wording.
 
 The skill does not fix numbers such as a coverage target, a cap on questions per questionnaire, or a recurrence threshold. Set a provisional value per project, mark it “needs confirmation”, and revise it after you measure.
 
