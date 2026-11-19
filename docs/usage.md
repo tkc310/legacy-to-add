@@ -1,33 +1,33 @@
 # Usage
 
-Install the skill first: see [Installation](installation.md). The procedure itself is in [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). This page is a guide for the person who asks an agent to follow it.
+日本語: [使い方](ja/usage.md)
 
-日本語の手順は [usage（日本語）](ja/usage.md) を見てください。
+This page is for the person who asks an agent to follow the skill. Install the skill first ([Installation](installation.md)). The procedure itself is in [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md).
 
 ## When to use it
 
-Use this skill when a project has lost the context that used to live in people’s heads or in documents, and you want to reach a state where AI-assisted development is safe because of structure, checks, and artifacts — not because a person reads every diff.
+Use this skill when a project has lost the context that used to live in people’s heads or in documents, and you want AI-assisted development on it to be safe because of structure, checks, and artifacts — not because a person reads every diff.
 
 Typical signs:
 
 - The original authors are gone, or will be gone soon.
-- Documents and the code disagree, or documents are missing.
+- Documents and code disagree, or documents are missing.
 - Tests are missing, failing, or do not protect the paths that matter.
-- The team wants agents to change the code, but does not yet have a way to catch recurring mistakes automatically.
+- The team wants agents to change the code, but has no way yet to catch recurring mistakes automatically.
 
-Do not use it as a one-shot rewrite of the system. The skill refuses big-bang rewrites and asks the agent to replace incrementally.
+Do not use it for a one-shot rewrite. The skill rules out big-bang rewrites and has the agent replace code incrementally.
 
-## Before any code is sent to an external AI service
+## Before you start
 
-The skill requires three confirmations before the agent sends code or documents to an external AI service, or makes changes:
+The skill requires three confirmations before the agent sends code or documents to an external AI service, or changes anything:
 
 1. **Contract and confidentiality.** May this code and these documents be sent to an external AI service? If not, shrink the work to what is allowed (for example, on-device processing only).
 2. **Write scope.** Which branches and environments may the agent touch? Production systems and production data are off limits without explicit permission.
-3. **People who own judgments.** Who decides the specification, who accepts behavior-changing changes, who approves releases, and who approves guardrail changes? Record them by role name. Missing roles belong in the policy document as risks.
+3. **People who own judgments.** Who decides the specification, who accepts behavior-changing changes, who approves releases, and who approves guardrail changes? Record them by role name. A role nobody fills goes into the policy document as a risk.
 
 ## Example prompts
 
-You can invoke the skill by name (`/legacy-to-ai-ready` in Claude Code or Cursor) and then state the request, or include the skill name in the prompt.
+Invoke the skill by name (`/legacy-to-ai-ready` in Claude Code or Cursor) and then state the request, or name the skill in the prompt.
 
 Start at stage 0:
 
@@ -37,64 +37,58 @@ Resume in a later stage:
 
 > Continue `legacy-to-ai-ready` on this repository. We already approved the policy document at `docs/ai-ready/policy.md`. We are in stage 2 for the billing area. Pin the current behavior with characterization tests before any fix.
 
-Ask the agent to stop at a human decision:
+Keep the agent from deciding what only a person can decide:
 
 > Follow `legacy-to-ai-ready`. Recover the specification for the authentication area (stage 1). Draft a multiple-choice questionnaire from the code and history. Do not treat your hypotheses as confirmed.
 
-Japanese examples are in [usage（日本語）](ja/usage.md).
+Japanese versions of these prompts are in [使い方](ja/usage.md).
 
 ## What the agent should do
 
 The skill tells the agent to:
 
-1. Start with the pre-flight checks and a stage-0 diagnosis, then produce the first policy document.
-2. Say, for each piece of work, which stage, area, and step it is in, against the policy document.
-3. Split work into small units that can be checked on their own, and not move on until the check for that unit passes.
-4. Attach evidence to a “done” report: commands actually run and their output, or the location of recordings. Write down what was not checked.
-5. Report whether the stage’s done criteria and the gate to the next stage are met, with reasons. Unmet items stay unmet; they are not papered over.
+1. Start with the three confirmations above and a stage-0 diagnosis, then produce the first policy document.
+2. Say, for each piece of work, which stage, area, and step it belongs to in the policy document.
+3. Split work into small units that can each be verified, and pass the check for one unit before starting the next.
+4. Attach evidence to every “done” report: the commands actually run and their output, or the location of recordings. State plainly what was not checked.
+5. Report, with reasons, whether the stage’s done criteria and the gate to the next stage are met. An unmet item is reported as unmet.
 6. Stop when a human judgment is required, and hand over short decision material, evidence, and a recommendation.
-7. When the same correction appears a second time, propose a change to the repository (design, types, lint, or tests) rather than memorizing the instruction.
-8. Not mark its own change as accepted. Not weaken tests, expectations, or properties under verification just to make a check pass.
+7. On receiving the same correction a second time, propose a change to the repository itself, at the highest level that works (design, then types or lint, then tests), instead of trying to remember the instruction.
+8. Never judge its own change as passing. Never weaken tests, expected values, or the properties under verification to make a check pass.
 9. Write new findings, decisions, and open questions back into the glossary, ADRs, judgment ledger, rules-to-enforcement mapping, and policy document.
-10. State numbers and tool behavior only after checking them. Unchecked items are marked “needs confirmation” (`要確認` in the skill text).
+10. State numbers and tool behavior only after checking them. Anything unchecked is marked “needs confirmation” (`要確認` in the skill text).
 
-A longer list of failure modes and how the skill avoids them is in the skill, under 「よくある失敗と回避策」.
+The skill also lists common failures and how to avoid each one, under 「よくある失敗と回避策」.
 
-## Stages and artifacts
+## Stages and the policy document
 
-The work goes through stages 0 to 5. Stages are not a rigid line: on a large project, run stages 1 and 2 per area, then move to stage 3 once those areas are covered.
+The work goes through stages 0 to 5: diagnose, recover the specification, pin behavior and fix, build guardrails, confirm done criteria and operate, and run the improvement loop. The [README](../README.md#stages) has a one-table summary; [Stages](stages.md) describes the work, done criteria, and gate for each stage.
 
-| Stage | Aim | Main artifacts |
-|---|---|---|
-| 0. Diagnose | Decide where to spend effort, and write the first policy document | Diagnosis record (including commands and output); first policy document |
-| 1. Recover the specification | Put terms and decisions back into a source of truth | Role list; glossary; ADRs; questionnaires and answers; deferred list; open questions |
-| 2. Pin behavior and fix | Characterize what the system does now, judge “as specified or a bug”, then fix | Characterization tests and specification tests; judgment ledger; fixes; bug cases kept as proof for later checks |
-| 3. Build guardrails | Encode rules in design, types, lint, and tests, and add a verification skill | Formatter, linter, and type settings; tests; verification skill; optional formal verification; agent rules; rules-to-enforcement mapping; CI |
-| 4. Confirm done criteria and operate | Confirm that AI-assisted work can run safely, and define the operating loop | Concrete done criteria; the AI-work flow; a place to record failures and corrections |
-| 5. Improvement loop | Turn recurring mistakes into structure, and adjust the guardrails and harness | Failure catalog; agreed automatic-change scope; proofs that new checks fail on past mistakes; metrics |
+The agent drafts the policy document in stage 0 and updates it as the stages progress. Two templates are provided:
 
-Details, done criteria, and gates: [Stages](stages.md).
+- [`templates/policy-document.md`](../templates/policy-document.md) — Japanese; matches the skill.
+- [`templates/policy-document.en.md`](../templates/policy-document.en.md) — English translation.
 
-The agent updates the policy document as stages progress. Start from the template in [`templates/policy-document.md`](../templates/policy-document.md) (Japanese, matches the skill) or [`templates/policy-document.en.md`](../templates/policy-document.en.md) (English translation). If the two disagree, the Japanese template and the skill are the source of truth.
+If the two disagree, the Japanese template and the skill are the source of truth.
 
 ## What humans still decide
 
-This skill does not try to remove human judgment. It tries to stop using “a person reads the diff” as the way safety is guaranteed.
+The skill does not try to remove human judgment. It stops using “a person reads the diff” as the guarantee of safety.
 
-Humans still:
+People still:
 
 - Confirm hypotheses, judge “as specified or a bug”, and decide the intended (To-Be) specification.
 - Approve the policy document and its priorities.
-- Accept behavior-changing changes (including the impact on users and existing data).
-- Approve relaxations of tests or checks, and exceptions.
-- Approve irreversible operations (production releases, data deletion or migration, sending data outside).
+- Accept behavior-changing changes, including their impact on users and existing data.
+- Approve changes that relax tests or checks, and approve exceptions.
+- Approve irreversible operations: production releases, data deletion or migration, sending data outside.
 - Change agent permissions and the scope of work left to agents.
 
-The agent should bring short decision material and evidence, not a request to read every changed line.
+For these, the agent should bring short decision material and evidence, not a request to read every changed line.
 
 ## Suggested layout in the target project
 
-The skill does not mandate path names. Pick one place under version control and write it in the policy document. A layout that stays easy to find:
+The skill does not prescribe path names. Pick one place under version control and name it in the policy document. One layout that is easy to navigate:
 
 ```text
 docs/ai-ready/
@@ -108,4 +102,4 @@ docs/ai-ready/
   failures/
 ```
 
-Use whatever already exists in the project if it can serve as the single source of truth. Do not keep a second copy in chat.
+If the project already has a place that can serve as the single source of truth, use it. Chat is not a second source of truth: a decision made there counts once it has been written back.

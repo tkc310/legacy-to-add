@@ -1,8 +1,10 @@
 # Stages
 
-This page summarizes stages 0 to 5 of [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). The skill is the source of truth for procedure, checklists, and wording. Numbers such as coverage targets or “how many questions per questionnaire” are not fixed by the skill; set a temporary value per project, mark it as needing confirmation, and revise it after you measure.
+日本語: [段階](ja/stages.md)
 
-日本語の説明は [stages（日本語）](ja/stages.md) を見てください。
+This page summarizes stages 0 to 5 of [`skills/legacy-to-ai-ready/SKILL.md`](../skills/legacy-to-ai-ready/SKILL.md). The skill is the source of truth for the procedure, the checklists, and the wording.
+
+The skill does not fix numbers such as a coverage target, a cap on questions per questionnaire, or a recurrence threshold. Set a provisional value per project, mark it “needs confirmation”, and revise it after you measure.
 
 ## How the stages relate
 
@@ -12,123 +14,223 @@ This page summarizes stages 0 to 5 of [`skills/legacy-to-ai-ready/SKILL.md`](../
 1 Recover the specification   ←→  2 Pin behavior and fix
         ↓  (stages 1–2 have covered the planned areas; tests are stable)
 3 Build guardrails
-        ↓  (a small trial: mistakes are caught, evidence is produced, the agent stops for human judgments)
+        ↓  (a small trial: mistakes are stopped, evidence is produced,
+        ↓   the agent stops for human judgments)
 4 Confirm done criteria and operate
         ↓  (the same kind of mistake is recurring)
-5 Improvement loop (encode recurring mistakes into structure;
-   adjust the guardrails and harness)
+5 Improvement loop (turn recurring mistakes into structure)
 ```
 
-Stages are not a strict sequence. On a large project, cycle stages 1 and 2 per area, then move to stage 3 when those areas are covered. Minimal automation (for example, running tests in CI) may be added during stage 2. Strict, repo-wide lint or type rules wait until stage 3, so a wave of mechanical changes does not mix with judgment and fixes.
+The stages are not a strict sequence. On a large project, cycle stages 1 and 2 area by area, and move to stage 3 once they have covered the planned areas.
+
+Minimal automation, such as running tests in CI, may be added during stage 2. Strict repo-wide conventions wait until stage 3: applied before behavior is settled, they produce a wave of mechanical changes that gets mixed up with judgments and fixes.
 
 ## What stands in for human review
 
-Safety is not guaranteed by having a person read every diff. Agents produce changes faster than that can keep up. The skill uses five kinds of assurance instead:
+The skill does not rely on a person reading every diff to keep changes safe. Agents produce changes faster than people can read them carefully. It relies on five kinds of assurance instead:
 
-1. **Make recurring mistakes impossible in the structure**, in this order: design and data structures; types, then lint or CI; tests; documents and agent rules (last, because an unread rule fails at nothing). Human review is not a step in this order.
-2. **Exercise the product the way a user would**, and keep evidence, as a project-local verification skill.
-3. **Formally verify the highest-risk properties** whose tests are hard to make complete, with the scope written down.
-4. **Stack work in small, verifiable units.** Each unit ends in a check. Do not move on until it passes.
-5. **Prove with artifacts.** “It compiled” is not evidence. Show commands and output, tests that failed and then passed, recordings of the running system.
+1. **Make recurring mistakes impossible through structure.** Choose the strongest enforcement that works, in this order: design and data structures; types, then lint or CI checks; tests; documents and agent rules. Documents come last because nothing fails when they are not followed. Human review is not a level in this order.
+2. **Exercise the product the way a user would,** and keep evidence. The steps live in a project-local verification skill.
+3. **Formally verify the highest-risk properties.** For properties that cause serious harm when broken and that tests reach poorly, check every case within a stated scope.
+4. **Build in small, verifiable units.** Each unit ends in a check. Do not move on until it passes.
+5. **Prove with artifacts.** “It compiled” is not evidence. Show the result of running the real thing: commands and their output, a test that failed and then passed, recordings of the screen.
 
-This has limits. Checks can tell you whether the system matches what you decided. They cannot decide what is correct. In a legacy project that missing decision is the starting point, so judging the specification and approving the policy stay with people. In stages 0 to 2 the structural guarantees are still thin, so more human confirmation remains. Remove human review only for kinds of change whose checks have already been shown to catch real mistakes.
+This approach has limits. Checks tell you whether the system does what was decided. They cannot decide what is correct, and in a legacy project that answer is missing from the code to begin with. So judging the specification and approving the policy stay with people.
+
+In stages 0 to 2 the structural guarantees are still thin, and more human confirmation remains. Remove human review only for kinds of change whose checks have been shown to stop real mistakes — never before.
 
 ## Stage 0: Diagnose the current state
 
-**Purpose.** Decide how much effort each later stage should get, and write the first policy document.
+**Purpose.** Decide how much effort each stage should get, and write the first policy document.
 
-**Inputs.** The repository; build and deploy setup; tickets and documents if they exist; interviews with the requester.
+**Inputs.** The repository; the build and deploy setup; tickets and documents, if any; interviews with the requester.
 
-**Work, in brief.** Investigate size and structure, tests, types, build and deploy, means of exercising the system, who holds domain knowledge and for how long, operations, recurring mistakes, and existing documents. Record what you ran, what you only read, and what you were told. Keep commands and output for anything you ran. Adjust the order of work to the situation (for example, interview first if the expert is about to leave; write a rollback path before behavior-changing changes if deploy is manual and there is no way back). Draft the policy document and ask the requester to approve it.
+**Work, in brief.**
+
+- Investigate size and structure, tests, types, build and deploy, the means of exercising the system, who holds domain knowledge and for how long they can be reached, operations, recurring mistakes, and existing documents.
+- Record separately what you ran, what you only read, and what you were told. Keep the commands and output for anything you ran.
+- Set priorities from what the diagnosis found. For example: if the expert is about to leave, interview first; if deploys are manual with no way back, write a rollback procedure before any behavior-changing change.
+- Draft the policy document and ask the requester to approve it.
 
 **Artifacts.** Diagnosis record (including commands and output); first policy document.
 
-**Done when.** Each aspect is marked confirmed or unconfirmed; priorities and reasons are written; people who own judgments are named by role.
+**Done when.** Each aspect is marked confirmed or unconfirmed; priorities and their reasons are written down; the people who own judgments are named by role.
 
-**Gate.** The requester has agreed to the priorities in the policy document. If build and run cannot be reproduced, fix that first.
+**Gate to stage 1.** The requester agrees with the priorities in the policy document. If build and run cannot be reproduced, fix that first.
 
 ## Stage 1: Recover the specification
 
-**Purpose.** Recover context that is not in the code, and keep terms and decisions in a source of truth. This is what later stages use to judge “as specified or a bug”.
+**Purpose.** Recover the context that is not in the code, and record terms and decisions in a single source of truth. Later stages use it to judge “as specified or a bug”.
 
-**Inputs.** Code, history, review records, tickets, existing documents, permitted past conversations, and the stage-0 diagnosis.
+**Inputs.** Code, commit history, review records, tickets, and existing documents; past conversations, as far as permitted; the stage-0 diagnosis.
 
-**Work, in brief.** List decision-makers and experts by role and area. Dig in the code and history before asking; do not ask what you can find out. Classify questions, and separate As-Is (confirm a hypothesis about current behavior) from To-Be (ask the decision-maker what should be true). Send bundled, multiple-choice questionnaires that include a hypothesis, evidence, options, and a “I don’t know (who does?)” way out. Write answers back into the glossary and ADRs. Confirmation by the respondent or decision-maker is what makes an entry confirmed. Keep hypotheses and confirmed facts visibly distinct.
+**Work, in brief.**
+
+- List decision-makers and experts by role, per functional area.
+- Dig before asking: do not ask what the code, history, or tickets can tell you. What you find goes into the glossary as a hypothesis, with its evidence.
+- Classify the questions. Separate As-Is (confirm a hypothesis about current behavior) from To-Be (ask the decision-maker what should be true).
+- Bundle questions into multiple-choice questionnaires and send them asynchronously. Each question carries a hypothesis, evidence, options, and an “I don’t know (who does?)” way out.
+- Write the answers back into the glossary and ADRs. An entry becomes confirmed when the respondent or decision-maker confirms it.
+- Keep hypotheses and confirmed entries visibly distinct. The agent does not change behavior on the strength of a hypothesis.
 
 **Artifacts.** Role list; glossary; ADRs; questionnaires and answers; deferred list; list of open questions.
 
-**Done when, for the area in scope.** Every blocking question is confirmed, or the decision-maker has explicitly deferred it; main terms are in the glossary as confirmed; remaining hypotheses are listed.
+**Done when, for the area in scope.** Every blocking question is confirmed, or the decision-maker has explicitly deferred it; the main terms are in the glossary as confirmed; the remaining hypotheses are listed.
 
-**Gate.** The area has enough confirmed terms and decisions to judge whether behavior is correct. Do not wait for the whole system. Questions that appear in stage 2 go back to a stage-1 questionnaire.
+**Gate to stage 2.** The area has enough confirmed terms and decisions to judge whether behavior is correct. Do not wait for the whole system: go area by area, and send questions that come up in stage 2 back to a stage-1 questionnaire.
 
 ## Stage 2: Pin behavior and fix toward the intended shape
 
-**Purpose.** Pin what the system does today, have a decision-maker judge each behavior, and fix what is a bug — without turning an unverified guess into a rewrite.
+**Purpose.** Pin current behavior with tests, then fix it toward the intended shape, bugs included. Keep a record of each judgment.
 
-**Work, in brief.** Start from high-risk paths and paths you already plan to change. Write characterization tests that lock current behavior *before* fixing, at observable boundaries, without tying them to internal call order. Mark them as “pins the current behavior; correctness is not yet judged.” For each pinned behavior, the decision-maker judges: as specified; a bug; not the specification but depended upon; or unknown. Record the judgment in a ledger. For bugs, write the failing test for the intended behavior first, then the fix, as separate commits. Do not mix behavior changes with refactoring. Keep fixed bugs as cases that later checks must fail on.
+**Inputs.** The stage-1 glossary, ADRs, and list of open questions; the code in scope; bug reports and logs, if any.
 
-**Artifacts.** Characterization tests and specification tests; judgment ledger; fix and refactoring changes; updated glossary and ADRs; bug cases for later proofs; a list of formal-verification candidates.
+**Work, in brief.**
 
-**Done when, for the area in scope.** High-risk paths are protected by tests; every pinned behavior has a judgment (including “unknown”, listed); bugs are fixed or have a scheduled response; remaining “unguarded / not yet judged” marks are known.
+- Start with high-risk paths and paths you already plan to change. Keep each target small enough to verify on its own.
+- Before fixing anything, write characterization tests that pin current behavior as it is, even where it looks wrong. Write them at observable boundaries (public functions, APIs, screens, output files), not against internal call order. Mark each one “pins current behavior; correctness not yet judged”.
+- Check that the tests protect something: breaking the behavior should fail the test, and changing only the internals should not.
+- For each pinned behavior, the decision-maker judges: as specified; a bug; not the specification, but depended upon; or unknown. The agent supplies the material and a recommendation. Record each judgment in the judgment ledger. “Unknown” goes back to a stage-1 questionnaire, and the behavior stays as it is until then.
+- For a bug, first write a test for the intended behavior and confirm that it fails; then fix. Commit the two separately.
+- Do not mix behavior changes with refactoring. Refactor only within what the tests protect, and confirm the test results are the same before and after.
+- Besides tests and build, run the real thing, and report the results as they are.
+- Keep each fixed bug as a case that later checks must fail on. Note candidates for formal verification as you find them.
 
-**Gate.** Stages 1 and 2 have covered the planned areas, and tests are stable (no flaky tests left). Then move to stage 3.
+**Artifacts.** Characterization tests and specification tests; judgment ledger; fixes and refactorings; updated glossary and ADRs; fixed-bug cases for later proofs; list of formal-verification candidates.
+
+**Done when, for the area in scope.** High-risk paths are protected by tests; every pinned behavior has a judgment, with “unknown” ones listed; each bug is fixed or has a scheduled response; the places still marked “not yet judged” are known.
+
+**Gate to stage 3.** Stages 1 and 2 have covered all the planned areas, and the tests pass reliably, with no flaky tests left.
 
 ## Stage 3: Build guardrails
 
-**Purpose.** Once behavior is pinned and the intended shape is in place across the planned areas, put repo-wide guardrails in place so recurring mistakes cannot land, and so an agent can check work the way a user would.
+**Purpose.** Reach a state where, whether a person or an agent makes the change, a mistake is either impossible by construction or caught early and mechanically. Also give the agent a way to check behavior for itself.
 
-**Work, in brief.** Add formatter, linter, and types gradually (often “deny new violations first”). Expand tests around risk and past bugs. Add a verification skill that drives the product as a user would and stores evidence. Consider formal verification for high-harm, hard-to-test properties, and write down the scope — or write down why it was skipped. Move mechanically checkable conventions out of prose and into lint, types, or tests. Write short agent rule files that point at those sources of truth. Keep a mapping of each rule to what enforces it (design, types, lint, tests, or nothing). Make checks run automatically, with the same commands locally and in CI. Prove each new check by showing that it fails on a past mistake or on a deliberate broken change (then discard that change).
+**Inputs.** The tests and records from stages 1–2, the fixed-bug cases, and the formal-verification candidates; how the code is actually written today; the official documentation of the tools in use.
 
-**Artifacts.** Formatter, linter, and type settings; expanded tests; verification skill and a feature list; formal verification and its scope, if chosen; naming and coding conventions; agent rules and the rules-to-enforcement mapping; automated checks; a list of existing violations and a plan to reduce them.
+**Work, in brief.**
 
-**Done when.** Checks run automatically and a failing change cannot be merged; local and CI commands match; conventions and rule files have a single source of truth; existing violations and exceptions are known, and exceptions have a reason, a deadline, and an approval; each check has been shown to catch a real mistake; the verification skill has been run end to end at least once, with evidence; every formal-verification candidate was either done or explicitly declined, with a reason.
+- Base conventions on what the code mostly does already and on what stage 2 fixed, not on an ideal.
+- Before adding prose or checks, try to design the mistake away: one owner per piece of state, one right way per task, hidden internals, a single source instead of hand-synced lists, and no stale patterns for an agent to copy.
+- Add mechanical checks one at a time: formatter, then linter (rules that find errors first), then types (from the boundaries inward), then more tests around risk, past bugs, and boundary values. Where existing violations are many, consider stopping new ones first and reducing the recorded rest. Every exception carries a reason, a deadline, and a human approval.
+- Create a verification skill that drives the product as a user would and stores evidence. Run it end to end once before relying on it.
+- Consider formal verification for the candidates from stage 2. State the scope, and show that the check fails on a deliberately broken version. If you skip a candidate, write down why.
+- Write prose conventions only for what needs judgment. Move anything mechanically checkable into lint, types, or tests.
+- Write short agent rule files that point at the sources of truth. File names and locations depend on the tool; confirm them.
+- Keep a mapping from each rule to what enforces it: design, types, lint, tests, or nothing.
+- Make the checks run automatically on every change, with the same commands locally and in CI.
+- Prove each new check: show that it fails on a real past mistake, or on a deliberately broken change that you then discard.
 
-**Gate.** Give an agent a small real task that depends only on the rule files and the verification skill. Move to stage 4 when (1) mistakes are stopped by the guardrails, (2) the agent can exercise the product and produce evidence, and (3) the agent stops when a human judgment is required.
+**Artifacts.** Formatter, linter, and type settings; expanded tests; verification skill and its feature list; formal verification and its scope, where chosen; naming and coding conventions; agent rule files and the rules-to-enforcement mapping; automated-check settings; list of existing violations and a plan to reduce them.
 
-## Stage 4: Confirm done criteria and operations
+**Done when.**
 
-**Purpose.** Confirm that you can honestly say “AI-assisted development can run safely here,” and define the operating loop so verification does not stall on a person.
+- Checks run automatically, and a failing change cannot be merged. The same commands run locally and in CI.
+- Conventions and rule files have a single source of truth.
+- Existing violations and exceptions are known, and each exception has a reason, a deadline, and an approval.
+- Each check has been shown to stop a real mistake.
+- The verification skill has been run end to end at least once, and the evidence is kept.
+- Each formal-verification candidate was either carried out or declined with a written reason.
 
-**Work, in brief.** Specialize the skill’s done-criteria checklist to the project (reproducible build and run; high-risk paths tested and stable; automatic checks that block merges; a verification skill; formal verification done or declined; glossary and ADRs with hypotheses and confirmed facts kept distinct; a judgment ledger; agent rules that name work requiring a human; the rules-to-enforcement mapping; limited agent permissions; a tried rollback path; named decision owners; trial AI work in which mistakes were caught before merge). Define the AI-work flow: a request with executable done criteria; a plan in verifiable units; implementation unit by unit; automatic checks; exercising the real system in a way that matches the kind of change; independent verification by a *different* agent than the author; hand-off of work that needs a human; then merge. Widen the scope of work left to agents only after checks have been shown to catch mistakes for that kind of change. Keep a record of AI failures, human corrections, CI failures, and reverts — this is the input to stage 5.
+**Gate to stage 4.** Give an agent a small real task, relying only on the rule files and the verification skill. Move on when (1) the guardrails stop its mistakes, (2) it can check behavior with the verification skill and produce evidence, and (3) it stops where a human judgment is required.
 
-**Artifacts.** Specialized done criteria and the result of checking them; a document for the AI-work flow; a place to record failures and corrections; results of reviewing the verification skill.
+## Stage 4: Confirm done criteria and operate
 
-**Done when.** Every checklist item is met, or is an approved exception; real work has gone through the agreed flow more than once (the suggested count is left as “needs confirmation”).
+**Purpose.** Confirm that “AI-assisted development can run safely here” is true, and decide how to keep it true. Verification is the step most likely to wait on a person, so make it something agents can do.
 
-**Gate.** Start stage 5 only when the same kind of mistake is recurring in the failure record, or when stage 0 already found recurring mistakes you can use as the first input. Do not start stage 5 from one-off stories; that produces too many rules.
+**Inputs.** The artifacts of stages 1–3; records of trial AI work.
+
+**Work, in brief.**
+
+- Make the skill’s done-criteria checklist specific to the project. For any item that is not met, write the reason and when it will be addressed. The checklist covers:
+  - build, test, and run reproducible from the documented steps alone;
+  - high-risk paths protected by stable tests;
+  - automatic checks that block failing changes;
+  - a verification skill;
+  - formal verification carried out, or declined with a reason;
+  - a glossary and ADRs that keep hypotheses and confirmed entries distinct;
+  - a judgment ledger that lists what is not yet judged;
+  - agent rule files that name the work requiring a human judgment;
+  - the rules-to-enforcement mapping, with unenforced rules known;
+  - agent permissions limited to what is needed;
+  - a release rollback procedure that has been tried;
+  - named owners for each judgment;
+  - trial AI work in which mistakes were caught by checks before merge.
+- Define the AI-work flow:
+  1. A request that states its done criteria as executable checks.
+  2. A plan from the agent, split into verifiable units.
+  3. Implementation unit by unit, passing each unit’s check before the next.
+  4. Automatic checks.
+  5. A check of the real thing, in a way that fits the kind of change.
+  6. Independent verification by an agent *other than* the author, by running it.
+  7. Hand-off to a person for changes that require human judgment.
+  8. Merge.
+- Widen what is left to agents step by step, starting with low-risk work. Remove human review for a kind of change only when a means of assurance exists and has a record of stopping mistakes. A person makes that call.
+- Record AI failures, human corrections, CI failures, and reverts in a form that can be classified later. This is the input to stage 5.
+- Keep the means of verification current. Inspect the verification skill regularly (the frequency needs confirmation per project), and fix only the skill itself: a product regression is reported as a regression, not hidden by editing the document. Revisit formal verification when the code it covers changes.
+- Keep knowledge current: new decisions go into ADRs, new terms into the glossary, and remaining hypotheses and the deferred list are reviewed regularly.
+- Follow the contract for handover and for deleting materials kept locally when the work ends.
+
+**Artifacts.** Project-specific done criteria and the result of checking them; a document describing the AI-work flow; a place to record failures and corrections; results of inspecting the verification skill.
+
+**Done when.** Every checklist item is met or is an approved exception; real work has gone through the agreed flow several times (how many is left as “needs confirmation”).
+
+**Gate to stage 5.** Start stage 5 when the same kind of mistake appears repeatedly in the record of failures and corrections. Recurring mistakes found in stage 0 can serve as the first target. Do not start while all you have is one-off cases: rules made from single cases become over-regulation.
 
 ## Stage 5: Improvement loop
 
-**Purpose.** When the same kind of mistake keeps appearing, encode it into the highest-leverage structure that prevents it, and keep adjusting the guardrails and harness. Do not add a new prose rule every time something fails.
+**Purpose.** Stop catching the same mistake by human correction or review every time. For each kind of mistake, change the repository so the next agent cannot make it.
 
-**Work, in brief.** Collect and classify failures and repeated human corrections. Propose a fix at the highest level that works (design first, then types or lint or CI, then tests, then documents or rules). Prove that the new check fails on past cases of that mistake. Loosen nothing automatically: deletions, disabled checks, weaker types, skipped tests, or weaker formal properties always need a human. Put limits on the loop itself (do not invent a rule from a single odd case; every rule needs a triggering case and an enforcement; cap the volume of prose rules and the number of changes per cycle; inventory unused or contradictory rules; keep changes small and reversible). Track metrics such as recurrence, where mistakes are caught, how much is encoded in structure, human burden, false positives, and the health of the loop — but do not game the metrics.
+**Inputs.** Corrections people gave the agent; records of AI failures; recent commits, reverts, review comments, and comments explaining workarounds; CI results; growth in lint suppressions, exceptions, and duplicated code; defects found after merge; the current rules-to-enforcement mapping, tests, lint settings, and conventions.
 
-**Artifacts.** Failure and correction records and a catalog of kinds; a written agreement of what may change automatically; the changes, their proofs, and approval records; an updated rules-to-enforcement mapping; evaluation cases; regular metric reports; inventory results.
+**Work, in brief.**
 
-**Done when.** The loop has gone around at least once from collection to measuring effect; each adopted measure has evidence that the check fails on a past mistake; the mapping is current and rules with no enforcement are listed; automatic scope and approval scope are written down; stop conditions and a rollback path exist; metrics are reported regularly; the work includes migrating rules into structure, merging them, and deleting them — not only adding them.
+- The agent collects, classifies, drafts the measure, and proves it. People approve loosening changes and the settings of the loop itself.
+- Record cases in a fixed format, with no secrets or personal information.
+- Group cases that share a cause into kinds. Leave one-off cases alone unless their impact is large; the threshold is a per-project value marked “needs confirmation”. Some causes are not handled by adding a rule: missing specification knowledge (add to the glossary or ADRs), an ambiguous or contradictory rule (rewrite it), a false positive or excessive constraint (a loosening change, so it goes to a person), and slow or flaky verification (fix the mechanism).
+- Fix each kind at the highest level that works: design first, then types and lint or CI checks, then tests, then documents or rules. If structure fixes it, add no prose instruction.
+- Fix one kind per change, most frequent first.
+- Prove each measure: the new check fails on a real past mistake; examples of correct changes still pass; the same command runs locally and in CI; the effect on verification time is known.
+- Update the rules-to-enforcement mapping.
+- Apply changes according to the agreed scope of automatic changes. Nothing that loosens a guardrail is ever automatic, however many cases support it: deleting or disabling a rule, adding an exception, weakening types, deleting or skipping a test or changing its expected value, dropping a required check, or weakening a formally verified property or model.
+- Measure the effect before and after. Withdraw or fix a change that does not work or has large side effects.
+- Limit the loop itself: no rule from a single odd case; every rule has a triggering case, a date, and an enforcement; cap the volume of prose rules and the number of changes per cycle; take regular inventory of rules that never fire, overlap, or contradict; keep changes small and individually reversible; decide in advance what stops the loop.
+- Track metrics: recurrence, where mistakes are caught, how much is enforced by structure, human burden, guardrail quality, rule health, and the loop itself. Changes made to improve the numbers (weakening tests, not recording failures) are forbidden and treated as loosening.
 
-**After that.** Whether to widen automatic application, or to remove human review for more kinds of change, is a human decision based on the metrics and the record. If the metrics get worse, narrow the scope.
+**Artifacts.** Records of failures and corrections, and the list of kinds; the written agreement on what may change automatically; the changes, their proofs, and approval records; the updated rules-to-enforcement mapping; evaluation cases; regular metric reports; inventory results.
+
+**Done when.**
+
+- The loop has gone around at least once, from collection to measuring the effect.
+- Each adopted measure has evidence that its check fails on a past mistake.
+- The mapping is current, and rules with no enforcement are listed.
+- The automatic scope and the approval scope are written down.
+- Stop conditions and a rollback procedure exist.
+- Metrics are reported regularly.
+- Rules are not only added: moves into structure, merges, and deletions have actually happened.
+
+**After that.** Whether to widen the automatic scope, or to remove human review for more kinds of change, is decided by people from the metrics and the record. If the metrics get worse, narrow the scope.
 
 ## Principles that apply in every stage
 
-The skill lists twelve cross-stage principles. The short version:
+The skill lists twelve cross-stage principles. In short:
 
-1. Stack work in small units that can be checked and reverted on their own.
-2. Stack in an order that proves something (failing test before the fix; deletion before the replacement; baseline measurement before the change).
-3. Do not mix behavior changes and refactoring in the same unit.
-4. Prove with artifacts from a running system, not proxy signals such as “it compiled.”
-5. The author of a change does not accept that change. A different agent exercises the real system. Reading a diff without running it does not count as verification.
-6. Replace incrementally (strangler, branch by abstraction, feature flags, running old and new in parallel). Decide up front when the old path will be deleted, and delete it when the migration is done.
-7. Start from high-risk, frequently changed, or poorly understood areas — not from the places that are easiest to tidy.
-8. Keep hypotheses and confirmed facts distinct until a decision-maker confirms them.
-9. Keep one source of truth, under version control. Chat and calls are inboxes; an entry is confirmed when it has been written back.
+1. Build in small units, each of which can be verified and reverted on its own.
+2. Build in an order that proves something: the failing test before the fix, the deletion before the replacement, the baseline measurement before the change.
+3. Keep behavior changes and refactoring in separate commits and separate units of verification.
+4. Prove with artifacts from the real thing, not with proxies such as “it compiled”.
+5. The author does not judge their own change. A different agent verifies it by running the real thing. Reading without running does not count as verification.
+6. Replace incrementally (strangler pattern, branch by abstraction, a flag that switches between old and new, running both in parallel). Decide up front the condition for deleting the old path, and delete it once the migration is done.
+7. Start where the risk is highest. Set priority by the impact of a failure, how often the code changes, and how poorly it is understood — not by how easy it is to tidy.
+8. Treat what the AI read out of the code as a hypothesis until the decision-maker confirms it, and keep the two distinct in the records.
+9. Keep one source of truth, under version control. Chat and calls are inboxes; an entry is confirmed once it has been written back.
 10. Do not fill gaps with guesses. Record what is unknown and stop.
-11. Keep a way back before you change behavior. Irreversible operations need a human.
-12. During long or unattended work, append a one-line decision record with time, stage, decision, reason, and a pointer to evidence.
+11. Confirm how to roll back before making a change. Irreversible operations need a human approval.
+12. During long or unattended work, append one line per decision: time, stage, what was decided, why, a pointer to evidence, and the result.
 
 ## Policy document
 
-Draft the policy in stage 0 and update it as you go. Unconfirmed items are written as “needs confirmation,” not left blank.
+Draft the policy document in stage 0 and update it as the stages progress. Write “needs confirmation” for anything unconfirmed; do not leave it blank.
 
 - Japanese template (matches the skill): [`templates/policy-document.md`](../templates/policy-document.md)
 - English translation: [`templates/policy-document.en.md`](../templates/policy-document.en.md)
