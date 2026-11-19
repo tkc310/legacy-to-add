@@ -41,6 +41,12 @@ Keep the agent from deciding what only a person can decide:
 
 > Follow `legacy-to-add`. Recover the specification for the authentication area (stage 1). Draft a short multiple-choice questionnaire with only the blocking or high-priority questions. Show the respondent just the question, a one-line hypothesis, and a few options; keep the evidence in your own ledger. Do not treat your hypotheses as confirmed.
 
+Choose how answers are collected before the questionnaire goes out:
+
+> Follow `legacy-to-add`. Before you send the stage-1 questionnaire, propose the ways to collect answers, including GitHub as the source of truth with Slack for input and a Claude artifact for display. State the concerns for each and wait for my choice. If I choose that option, walk me through the build one step at a time.
+
+The methods, the concerns, and the build guide are in [Answer collection](answer-collection.md).
+
 Japanese versions of these prompts are in [使い方](ja/usage.md).
 
 ## What the agent should do
@@ -57,6 +63,7 @@ The skill tells the agent to:
 8. Never judge its own change as passing. Never weaken tests, expected values, or the properties under verification to make a check pass.
 9. Write new findings, decisions, and open questions back into the glossary, ADRs, judgment ledger, rules-to-enforcement mapping, and policy document.
 10. State numbers and tool behavior only after checking them. Anything unchecked is marked “needs confirmation” (`要確認` in the skill text).
+11. Before the first questionnaire goes out, propose ways to collect the answers, with their concerns. Send or build nothing until the user has chosen.
 
 The skill also lists common failures and how to avoid each one, under 「よくある失敗と回避策」.
 
@@ -103,3 +110,5 @@ docs/ai-ready/
 ```
 
 If the project already has a place that can serve as the single source of truth, use it. Chat is not a second source of truth: a decision made there counts once it has been written back.
+
+How the answers reach this place is a separate choice. In stage 1 the agent proposes collection methods and waits for yours; whichever you choose, the answers are written back here. If you choose Slack for input, add an append-only answer log (for example `answers/`). See [Answer collection](answer-collection.md).
